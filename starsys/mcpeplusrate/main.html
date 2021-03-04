@@ -1,0 +1,124 @@
+<link rel="stylesheet" href="main.css">
+<table class="center">
+	<tr>
+		<h1 id="info2" style="display:none">Thank You!</h1>
+		<h1 id="info1" style="display:block">Click the stars to rate MCPE Plus</h1>
+	</tr>
+	<tr>
+		<td>
+			
+			<fieldset class="rating">
+				<input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+				<input type="radio" id="star4half" name="rating" value="4 and a half" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+				<input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+				<input type="radio" id="star3half" name="rating" value="3 and a half" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+				<input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+				<input type="radio" id="star2half" name="rating" value="2 and a half" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+				<input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+				<input type="radio" id="star1half" name="rating" value="1 and a half" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+				<input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+				<input type="radio" id="starhalf" name="rating" value="half" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+			</fieldset>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<button id="ratingbutton" style="display:none" onclick='submit()'>submit rating</button>
+			<h2 id="ratingnum" style="display:block">-</h1>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<h3 id="reviewnum" style="display:block">- Reviews</h1>
+		</td>
+	</tr>
+</table>
+
+<script>
+start()
+
+function findRadioVal (name){
+  radios=document.getElementsByName(name)
+  for (var i = 0, length = radios.length; i < length; i++) {
+    if (radios[i].checked) {
+      // do whatever you want with the checked radio
+      return radios[i].value
+
+      // only one radio can be logically checked, don't check the rest
+      break;
+    }
+  }
+}
+
+function setRadioVal(name,item){
+  radios=document.getElementsByName(name)
+  radios[item].checked=true
+}
+
+function addRadioListen(name){
+  radios=document.getElementsByName(name)
+  for (var i = 0; i < radios.length; i++) {
+    radios[i].addEventListener('change', function() {
+        window.starvalue=this.value
+		submitOption()
+    });
+  }
+}
+
+function submitOption(){
+	document.getElementById("ratingbutton").style.display='block'
+	document.getElementById("ratingnum").style.display='none'
+	document.getElementById("reviewnum").style.display='none'
+}
+
+function submit(){
+	document.getElementById("ratingbutton").style.display='none'
+	document.getElementById("ratingnum").style.display='block'
+	document.getElementById("reviewnum").style.display='block'
+	document.getElementById("info1").style.display='none'
+	document.getElementById("info2").style.display='block'
+	disableRadio('rating')
+	sendData(findRadioVal('rating'))
+	updateData()
+}
+
+function disableRadio(name){
+	radios=document.getElementsByName(name)
+	for (var i = 0; i < radios.length; i++) {
+		radios[i].disabled=true
+	}
+}
+
+function getData(){
+        var fullUrl = ("https://script.google.com/macros/s/AKfycby5e62rT2ycT1jcRD8uex-tNKj5Gb8ciaAjHyTn7PO9DR0kwlXg/exec");
+        var xhReq = new XMLHttpRequest();
+        xhReq.open("GET", fullUrl, false);
+        xhReq.send(null);
+        var jsonObject = xhReq.responseText;
+	    return(jsonObject);
+	  };
+	  
+function updateData(){
+	var data=JSON.parse(getData())
+	var ratedata=Math.round(data[0] * 10) / 10
+	var reviewdata=data[1]
+	var stardata=10-Math.round(data[0]*2)
+	document.getElementById('ratingnum').innerHTML=JSON.stringify(ratedata)
+	document.getElementById('reviewnum').innerHTML=JSON.stringify(reviewdata)+" Reviews"
+	setRadioVal('rating',stardata)
+	
+}
+
+function start(){
+	addRadioListen('rating')
+	updateData()
+}
+
+function sendData(data) {
+	var fullUrl = ("https://script.google.com/macros/s/AKfycbwm3CdBZOOnjSBrQLe4nS2iH0Ca8LT_u_Sh5uZXc5q4gZwZMubh/exec?data="+data);
+        var xhReq = new XMLHttpRequest();
+        xhReq.open("GET", fullUrl, false);
+        xhReq.send(null);
+	  };
+
+</script>
