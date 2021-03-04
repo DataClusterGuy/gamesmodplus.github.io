@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body style="margin:0;overflow:hidden;background-color:#dedede;" onload="removeBanner(); document.getElementById('iframe').src='embed1.7.html?'+location.search.substr(1);">
+		<div style="text-align:center">
+			<iframe id="iframe" src="" style="width:100vmin;height:100vmin;border:none;">
+			</iframe>
+		</div>
+		<script>
+		function removeBanner(){
+			elements=document.getElementsByTagName('a')
+
+			for (i=0;i<elements.length;i++){
+				if (elements[i].title=='Hosted on free web hosting 000webhost.com. Host your own website for FREE.'){
+					elements[i].parentElement.remove()
+				}
+			}
+		}
+		</script>
+	</body>
+</html>
